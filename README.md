@@ -89,3 +89,253 @@
     - Melakukan pembaruan keamanan dan perbaikan bug
     - Menambahkan fitur baru berdasarkan umpan balik pengguna
     - Mengoptimalkan performa aplikasi sesuai kebutuhan
+   
+
+## Diagram Kelas (Class Diagram)
+
+'''
++------------------------+         +------------------------+
+|         User           |         |         Folder         |
++------------------------+         +------------------------+
+| -id: int               |         | -id: int               |
+| -name: string          |         | -user_id: int          |
+| -email: string         |         | -name: string          |
+| -password: string      |         | -description: string   |
+| -avatar: string        |         | -visibility: string    |
+| -bio: string           |         | -created_at: timestamp |
+| -website: string       |         | -updated_at: timestamp |
+| -google_id: string     |         +------------------------+
+| -facebook_id: string   |                     |
+| -twitter_id: string    |                     |
+| -email_verified_at: timestamp |              |
+| -created_at: timestamp |                     |
+| -updated_at: timestamp |                     |
++------------------------+                     |
+            |                                  |
+            |                         +------------------------+
+            |                         |       Flashcard        |
+            |                         +------------------------+
+            |                         | -id: int               |
+            |                         | -folder_id: int        |
+            |                         | -front: string         |
+            |                         | -back: string          |
+            |                         | -image: string         |
+            |                         | -audio: string         |
+            |                         | -created_at: timestamp |
+            |                         | -updated_at: timestamp |
+            |                         +------------------------+
+            |
++------------------------+         +------------------------+
+|          Quiz          |         |        Question        |
++------------------------+         +------------------------+
+| -id: int               |         | -id: int               |
+| -user_id: int          |         | -quiz_id: int          |
+| -title: string         |         | -question: string      |
+| -description: string   |         | -question_type: string |
+| -difficulty: string    |         | -image: string         |
+| -time_limit: int       |         | -created_at: timestamp |
+| -visibility: string    |         | -updated_at: timestamp |
+| -created_at: timestamp |         +------------------------+
+| -updated_at: timestamp |                     |
++------------------------+                     |
+                                     +------------------------+
+                                     |         Answer         |
+                                     +------------------------+
+                                     | -id: int               |
+                                     | -question_id: int      |
+                                     | -answer: string        |
+                                     | -is_correct: boolean   |
+                                     | -created_at: timestamp |
+                                     | -updated_at: timestamp |
+                                     +------------------------+
+'''
+## Diagram Use Case (Use Case Diagram)
+
+'''
++------------------+
+|      User        |
++------------------+
+| -Register        |
+| -Login           |
+| -Logout          |
+| -Edit Profile    |
+| -Create Folder   |
+| -Edit Folder     |
+| -Delete Folder   |
+| -Create Flashcard|
+| -Edit Flashcard  |
+| -Delete Flashcard|
+| -Create Quiz     |
+| -Edit Quiz       |
+| -Delete Quiz     |
+| -Attempt Quiz    |
+| -View Results    |
+| -Subscribe       |
+| -Make Payment    |
++------------------+
+         |
+         |
+         |
+         |
++------------------+
+|      System      |
++------------------+
+| -Authenticate User |
+| -Manage Folders    |
+| -Manage Flashcards |
+| -Manage Quizzes    |
+| -Manage Questions  |
+| -Manage Answers    |
+| -Manage Tags       |
+| -Manage Collaborations |
+| -Manage Quiz Attempts |
+| -Manage Notifications |
+| -Manage Subscriptions |
+| -Process Payments    |
++------------------+
+'''
+
+## Entity Relationship
+
+'''
+[User]
+*id {PK, AI}
+name
+email
+password
+avatar
+bio
+website
+google_id
+facebook_id
+twitter_id
+email_verified_at
+created_at
+updated_at
+
+[Folder]
+*id {PK, AI}
+*user_id {FK, AI}
+name
+description
+visibility
+created_at
+updated_at
+
+[Flashcard]
+*id {PK, AI}
+*folder_id {FK, AI}
+front
+back
+image
+audio
+created_at
+updated_at
+
+[Quiz]
+*id {PK, AI}
+*user_id {FK, AI}
+title
+description
+difficulty
+time_limit
+visibility
+created_at
+updated_at
+
+[Question]
+*id {PK, AI}
+*quiz_id {FK, AI}
+question
+question_type
+image
+created_at
+updated_at
+
+[Answer]
+*id {PK, AI}
+*question_id {FK, AI}
+answer
+is_correct
+created_at
+updated_at
+
+[Tag]
+*id {PK, AI}
+name
+created_at
+updated_at
+
+[FlashcardTag]
+*flashcard_id {FK, AI}
+*tag_id {FK, AI}
+
+[UserFolder]
+*user_id {FK, AI}
+*folder_id {FK, AI}
+permission
+
+[FolderCollaboration]
+*folder_id {FK, AI}
+*user_id {FK, AI}
+role
+
+[QuizAttempt]
+*id {PK, AI}
+*user_id {FK, AI}
+*quiz_id {FK, AI}
+score
+started_at
+finished_at
+
+[QuizResult]
+*id {PK, AI}
+*quiz_attempt_id {FK, AI}
+*question_id {FK, AI}
+*answer_id {FK, AI}
+is_correct
+
+[Notification]
+*id {PK, AI}
+*user_id {FK, AI}
+message
+read_at
+created_at
+updated_at
+
+[Subscription]
+*id {PK, AI}
+*user_id {FK, AI}
+plan
+start_date
+end_date
+created_at
+updated_at
+
+[Payment]
+*id {PK, AI}
+*user_id {FK, AI}
+*subscription_id {FK, AI}
+amount
+payment_method
+transaction_id
+status
+created_at
+updated_at
+
+User *--1 Folder
+User *--1 Quiz
+Folder *--1 Flashcard
+Quiz *--1 Question
+Question *--1 Answer
+Flashcard *--* Tag {via FlashcardTag}
+User *--* Folder {via UserFolder}
+Folder *--* User {via FolderCollaboration}
+User *--* Quiz {via QuizAttempt}
+QuizAttempt *--1 QuizResult
+QuizResult *--1 Question
+QuizResult *--1 Answer
+User *--1 Notification
+User *--1 Subscription
+User *--1 Payment
+Subscription *--1 Payment
