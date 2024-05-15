@@ -93,7 +93,7 @@
 
 ## Diagram Kelas (Class Diagram)
 
-'''
+```
 +------------------------+         +------------------------+
 |         User           |         |         Folder         |
 +------------------------+         +------------------------+
@@ -148,10 +148,10 @@
                                      | -created_at: timestamp |
                                      | -updated_at: timestamp |
                                      +------------------------+
-'''
+```
 ## Diagram Use Case (Use Case Diagram)
 
-'''
+```
 +------------------+
 |      User        |
 +------------------+
@@ -193,11 +193,11 @@
 | -Manage Subscriptions |
 | -Process Payments    |
 +------------------+
-'''
+```
 
 ## Entity Relationship
 
-'''
+```
 [User]
 *id {PK, AI}
 name
